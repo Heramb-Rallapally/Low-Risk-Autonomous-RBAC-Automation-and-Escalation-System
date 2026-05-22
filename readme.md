@@ -35,14 +35,6 @@ This project is intended as a secure, auditable starting point for production-gr
    - Coordinate multi-agent workflows when needed.
 4. Audit trail persisted for all policy changes, decisions and model-assisted actions.
 
-## Security & Compliance (enterprise guidance)
-- Secrets: Use a secrets manager (Azure Key Vault, AWS Secrets Manager, HashiCorp Vault). Do NOT store credentials in repo or environment files checked into source control.
-- Transport: Enforce TLS for all external and internal traffic.
-- Authentication: Integrate with enterprise SSO/OAuth2 (OIDC) or mTLS. Backend assumes authenticated caller and enforces RBAC.
-- Authorization: Implement least privilege RBAC roles and permission checks server-side in controllers/services.
-- Audit: Log all policy edits, automated LLM recommendations, and approval actions to an immutable audit store.
-- Data handling: Sanitize and redact PII before sending to LLM providers. Maintain data retention and deletion policies.
-- LLM usage: Treat LLM outputs as advisory unless explicitly signed/approved. Maintain model provenance and prompt logs.
 
 ## Quickstart (Windows)
 Prerequisites:
@@ -51,17 +43,15 @@ Prerequisites:
 - Virtual environment tooling (venv) and pip
 - Enterprise secrets manager or local env for development
 
-1. Open project folder:
-   - PowerShell: cd "c:\Users\heram\OneDrive\Documents\4-1_projects\rbac_llm"
 
-2. Backend (Node.js)
+1. Backend (Node.js)
    - Install deps: npm install --prefix backend
    - Configure env (example):
      - Create backend/.env or export: BACKEND_PORT=3000 BACKEND_DB_URL="<your-db-connection>" NODE_ENV=development
    - Run: npm start --prefix backend
    - Tests (if present): npm test --prefix backend
 
-3. Agentic (Python)
+2. Agentic (Python)
    - Create venv and activate:
      - python -m venv .venv
      - .\.venv\Scripts\Activate
@@ -86,20 +76,10 @@ Use a centralized configuration and secrets store; avoid local plaintext .env fo
 - Add health checks, readiness/startup probes, metrics (Prometheus) and structured logs (JSON) sent to a central log store.
 - Implement RBAC for the Kubernetes cluster and restrict service account permissions using least privilege.
 
-## Testing & QA
-- Unit test controllers, services, and agent tools.
-- Add integration tests that exercise API endpoints with mocked backend dependencies and a test database.
-- Create end-to-end tests for key workflows: request -> policy evaluation -> approval -> audit entry.
-
 ## Operational considerations
 - Rate-limit and monitor calls to external LLM providers.
 - Implement request/response tracing (correlation IDs) for observability across backend and agents.
 - Maintain an approvals ledger and changelog for policy edits to satisfy audit/regulatory requirements.
-
-## Contribution & Governance
-- Follow enterprise code review policies and require PRs with tests and documentation.
-- Maintain a CHANGELOG and semantic versioning.
-- Add CODEOWNERS and an internal developer handbook for contributor guidance.
 
 ## Roadmap & Extensions
 - Policy-as-code enforcement with automated tests.
@@ -107,11 +87,3 @@ Use a centralized configuration and secrets store; avoid local plaintext .env fo
 - Pluggable policy engines (OPA/Conftest) for compliance checks.
 - Fine-grained attribute-based access control (ABAC) integration.
 
-## License & Legal
-Add an appropriate enterprise license (e.g., company-specific CLA + commercial license) and include third-party license attributions. Do not ship provider secrets or copyrighted model artifacts.
-
-## Contact
-For internal deployment, contact the platform/security team and the repository owners in the CODEOWNERS file.
-
-## Notes
-This README is a template for enterprise adoption. Update environment-specific values, deployment manifests, and security policies before production rollout.
